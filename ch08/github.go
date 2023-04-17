@@ -4,7 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"io/ioutil"
-	"json"
+	"encoding/json"
 	"net/http"
 	"reflect"
 )
