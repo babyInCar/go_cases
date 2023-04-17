@@ -1,10 +1,10 @@
 package main
 
 import (
+	"encoding/json"
 	"flag"
 	"fmt"
 	"io/ioutil"
-	"encoding/json"
 	"net/http"
 	"reflect"
 )
@@ -89,14 +89,12 @@ func FlagHelper() {
 	if Account == "field" {
 		cmdFlag.GithubUserFields()
 		return
-	}
-	else
-	{
+	} else {
 		cmdFlag.GithubUserStorager(Account)
 		return
 	}
 }
 
-func main(){
+func main() {
 	FlagHelper()
 }
