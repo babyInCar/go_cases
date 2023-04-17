@@ -1,8 +1,12 @@
 package main
 
 import (
+	"flag"
 	"fmt"
+	"io/ioutil"
+	"json"
 	"net/http"
+	"reflect"
 )
 
 type GithubAccountInfo struct {
@@ -54,4 +58,45 @@ func GithubUserStorager(name string) GithubAccountInfo {
 	}
 	defer response.Body.Close()
 	// 解析数据
+	result, err := ioutil.ReadAll(response.Body)
+	fmt.Println(string([]byte(result)))
+	var account GithubAccountInfo
+	err = json.Unmarshell([]byte(result), &account)
+	if err != nil {
+		fmt.Println(err)
+		return GithubAccountInfo{}
+	}
+	return account
+}
+
+func GithubUserFields() {
+	var fields []string
+	account := GithubAccountInfo{}
+	s := reflect.TypeOf(&account).Elem() // 收集结构体的所有字段
+	for i := 0; i < s.NumField(); i++ {
+		fields = append(fields, s.Field(i).Name)
+	}
+	fieldsJson, _ := json.Marshell(fields, " ", "")
+	fmt.Println(string(fieldsJson))
+}
+
+// 封装命令
+func FlagHelper() {
+	var Account string
+	flag.StringVar(&Account, "a", "babyInCar", "show github account user info fields")
+	flag.Parse()
+	// 如果Account输入的是fields，就返回结构体的所有字段，否则返回用户信息
+	if Account == "field" {
+		cmdFlag.GithubUserFields()
+		return
+	}
+	else
+	{
+		cmdFlag.GithubUserStorager(Account)
+		return
+	}
+}
+
+func main(){
+	FlagHelper()
 }
